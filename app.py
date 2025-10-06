@@ -9,7 +9,10 @@ from playwright.sync_api import sync_playwright
 from PIL import Image
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from n8n
+CORS(app)
+
+# Set Playwright browser path for Render.com
+os.environ['PLAYWRIGHT_BROWSERS_PATH'] = '/opt/render/project/src/ms-playwright-browsers'
 
 @app.route("/", methods=["GET"])
 def home():
@@ -53,7 +56,10 @@ def html_to_image(html_content, quality=90):
         file_url = f"file:///{temp_html_path.replace(os.sep, '/')}"
 
         with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
+            browser = p.chromium.launch(
+                headless=True,
+                args=['--no-sandbox', '--disable-setuid-sandbox']
+            )
             page = browser.new_page()
             page.goto(file_url)
             page.wait_for_load_state("networkidle")
