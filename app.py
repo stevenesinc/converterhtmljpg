@@ -12,19 +12,14 @@ app = Flask(__name__)
 CORS(app)
 
 # Set Playwright browser path for Render.com
-os.environ['PLAYWRIGHT_BROWSERS_PATH'] = '/opt/render/project/src/ms-playwright-browsers'
+os.environ['PLAYWRIGHT_BROWSERS_PATH'] = '/ms-playwright'
 
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({
         "service": "HTML to Image Converter",
         "version": "1.0.0",
-        "status": "running",
-        "endpoints": {
-            "/health": "GET - Health check",
-            "/ping": "POST - Echo test",
-            "/convert": "POST - Convert HTML to image"
-        }
+        "status": "running"
     })
 
 @app.route("/ping", methods=["POST"])
@@ -110,7 +105,7 @@ def convert_html_to_image():
     else:
         return jsonify({"success": False, "error": result["error"]}), 500
 
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
+    print(f"🚀 Starting HTML → Image Service on port {port}...")
     app.run(host="0.0.0.0", port=port, debug=False)
