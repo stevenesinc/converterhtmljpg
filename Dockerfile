@@ -15,5 +15,4 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 EXPOSE 5000
 
 CMD gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 app:app
-EOF
 
